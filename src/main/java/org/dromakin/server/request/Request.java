@@ -14,7 +14,11 @@ package org.dromakin.server.request;
 
 
 import lombok.*;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
 
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +33,30 @@ public class Request {
     private final String protocol;
     private final List<String> body = new ArrayList<>();
     private final Map<String, String> headers = new HashMap<>();
+    private URI uri;
+    private List<NameValuePair> queryParams;
+
+    public void initQueries() {
+        this.uri = URI.create(this.url);
+        this.queryParams = URLEncodedUtils.parse(this.uri, StandardCharsets.UTF_8);
+    }
+
+    public String getUrlPath() {
+        return uri.getPath();
+    }
+
+    public String getPostParams(String name) {
+        for (NameValuePair param : queryParams) {
+            if (param.getName().equals(name)) {
+                return param.getValue();
+            }
+        }
+        return null;
+    }
+
+    public List<NameValuePair> getPostParams() {
+        return queryParams;
+    }
 
     public void addHeader(String header, String value) {
         if (!this.headers.containsKey(header)) {

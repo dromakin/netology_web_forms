@@ -62,6 +62,8 @@ public class RequestMapperThread implements Runnable {
                     .protocol(parts[2])
                     .build();
 
+            request.initQueries();
+
             // reading HTTP Headers
             while (in.ready()) {
                 String s = in.readLine();
@@ -95,11 +97,15 @@ public class RequestMapperThread implements Runnable {
 
         switch (request.getRequestMethod()) {
             case GET:
-                handler = this.requestHandlers.getHandlerGETRequests().get(request.getUrl());
+                handler = this.requestHandlers.getHandlerGETRequests().get(request.getUrlPath());
 
                 if (handler != null) {
 
-                    logger.info("Processing [GET] request: " + request.getUrl());
+                    if (request.getPostParams().isEmpty()) {
+                        logger.info("Processing [GET] request: " + request.getUrlPath());
+                    } else {
+                        logger.info("Processing [GET] request: {} with params!", request.getUrlPath());
+                    }
 
                     handler.handle(request, out);
 
@@ -110,11 +116,15 @@ public class RequestMapperThread implements Runnable {
                 break;
 
             case POST:
-                handler = this.requestHandlers.getHandlerPOSTRequests().get(request.getUrl());
+                handler = this.requestHandlers.getHandlerPOSTRequests().get(request.getUrlPath());
 
                 if (handler != null) {
 
-                    logger.info("Processing [POST] request: " + request.getUrl());
+                    if (request.getPostParams().isEmpty()) {
+                        logger.info("Processing [POST] request: " + request.getUrlPath());
+                    } else {
+                        logger.info("Processing [POST] request: {} with params!", request.getUrlPath());
+                    }
 
                     handler.handle(request, out);
 

@@ -16,10 +16,11 @@ import lombok.Builder;
 
 @Builder
 public class Response {
-    private static final String END_LINE = "\r\n";
-    private static final String DELIMITER = " ";
+    public static final String END_LINE = "\r\n";
+    public static final String DELIMITER = " ";
     private static final String HTTP = "HTTP/1.1";
     private static final String HTTP_CONTENT_TYPE = "Content-Type:";
+    public static final String HTTP_CONTENT_TYPE_TEXT_PLAIN = "text/plain";
     private static final String HTTP_CONTENT_LENGTH = "Content-Length:";
     private static final String HTTP_CONNECTION = "Connection:";
     private static final String HTTP_CONNECTION_CLOSE = HTTP_CONNECTION + DELIMITER + "close" + END_LINE;
